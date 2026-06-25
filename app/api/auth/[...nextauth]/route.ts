@@ -1,5 +1,7 @@
+import "@/lib/bootstrap"; // fail-fast env validation (Rule 1)
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
+import { rateLimit } from "@/lib/rate-limit";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -26,4 +28,17 @@ export const authOptions: NextAuthOptions = {
 
 const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST };
+// wrap NextAuth handler with rate limiting (Rule 7)
+async function rateLimitedHandler(req: Request, context: any) {
+  const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
+  if (!rateLimit(`auth_${ip}`, 30, 60000)) {
+    return new Response(JSON.stringify({ error: "Too many authentication requests. Please try again later." }), {
+      status: 429,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+  return handler(req, context);
+}
+
+export { rateLimitedHandler as GET, rateLimitedHandler as POST };
+

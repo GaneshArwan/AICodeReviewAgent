@@ -1,3 +1,4 @@
+import "@/lib/bootstrap"; // fail-fast env validation (Rule 1)
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
@@ -5,9 +6,12 @@ import { Octokit } from "@octokit/rest";
 import { z } from "zod";
 import { rateLimit } from "@/lib/rate-limit";
 
+const ownerRegex = /^[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
+const repoRegex = /^[a-zA-Z0-9._-]+$/;
+
 const prQuerySchema = z.object({
-  owner: z.string().min(1),
-  repo: z.string().min(1),
+  owner: z.string().min(1).regex(ownerRegex, "Invalid owner format"),
+  repo: z.string().min(1).regex(repoRegex, "Invalid repo format"),
   page: z.coerce.number().min(1).default(1),
   search: z.string().default(""),
   startDate: z.string().default(""),

@@ -3,6 +3,10 @@ import net from 'net';
 import path from 'path';
 
 const command = process.argv[2]; // 'dev' or 'start'
+if (command !== 'dev' && command !== 'start') {
+  console.error('Invalid command. Must be "dev" or "start".');
+  process.exit(1);
+}
 const startPort = parseInt(process.env.PORT || '3000', 10);
 
 function isPortAvailable(port) {

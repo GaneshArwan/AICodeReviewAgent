@@ -51,13 +51,13 @@ function getLLM(provider: LLMProvider, apiKey: string, customModel?: string) {
   switch (provider) {
     case 'anthropic':
       return new ChatAnthropic({
-        apiKey: cleanKey,
+        apiKey: (cleanKey === "none" || !cleanKey) ? (process.env.ANTHROPIC_API_KEY || "") : cleanKey,
         model: customModel,
         temperature,
       });
     case 'gemini':
       return new ChatGoogleGenerativeAI({
-        apiKey: cleanKey,
+        apiKey: (cleanKey === "none" || !cleanKey) ? (process.env.GOOGLE_GENAI_API_KEY || "") : cleanKey,
         model: customModel,
         temperature,
       });
@@ -73,7 +73,7 @@ function getLLM(provider: LLMProvider, apiKey: string, customModel?: string) {
     case 'openai':
     default:
       return new ChatOpenAI({
-        apiKey: cleanKey,
+        apiKey: (cleanKey === "none" || !cleanKey) ? (process.env.OPENAI_API_KEY || "") : cleanKey,
         model: customModel,
         temperature,
       });

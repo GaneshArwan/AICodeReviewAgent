@@ -6,6 +6,16 @@ const rateLimitMap = new Map<string, { count: number; timestamp: number }>();
 
 export function rateLimit(key: string, limit: number, windowMs: number): boolean {
   const now = Date.now();
+
+  // ponytail: prune expired entries when map exceeds 1000 items to prevent memory exhaustion DoS
+  if (rateLimitMap.size > 1000) {
+    for (const [k, v] of rateLimitMap.entries()) {
+      if (now - v.timestamp > windowMs) {
+        rateLimitMap.delete(k);
+      }
+    }
+  }
+
   const record = rateLimitMap.get(key);
 
   if (!record) {
