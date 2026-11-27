@@ -7,6 +7,9 @@ const REQUIRED_ENV_VARS = [
 ];
 
 export function validateEnv() {
+  if (process.env.NEXT_PHASE === "phase-production-build") {
+    return;
+  }
   for (const name of REQUIRED_ENV_VARS) {
     if (!process.env[name]) {
       console.error(`FATAL: Required environment variable "${name}" is not set. Refusing to start.`);
