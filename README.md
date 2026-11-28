@@ -5,6 +5,20 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## Live Demo
+
+Live Deployment: [ai-code-review-agent-sigma.vercel.app](https://ai-code-review-agent-sigma.vercel.app/)
+
+![Live Demo](docs/media/demo.gif)
+
+[Watch full MP4 walkthrough](docs/media/demo.mp4)
+
+## Screenshots
+
+| Dashboard | Provider Configuration |
+| :---: | :---: |
+| ![Dashboard](docs/media/screenshot-desktop.png) | ![Provider Configuration](docs/media/screenshot-interactive.png) |
+
 ## Why This Exists
 
 Manual code reviews are time-consuming, prone to human error, and often miss subtle security vulnerabilities when diffs become too large. This agent automates the initial review pass by breaking down massive pull requests into manageable chunks, performing targeted security audits, and delivering inline, actionable feedback. This allows human reviewers to focus on high-level architecture rather than catching typos or standard security flaws.
